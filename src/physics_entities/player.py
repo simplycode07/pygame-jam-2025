@@ -1,3 +1,4 @@
+from math import sqrt
 import pygame
 
 from src.ui import UIState
@@ -9,14 +10,10 @@ class Sprite:
     def __init__(self, tilemap, init_pos) -> None:
         self.tilemap = tilemap
 
-        # self.pos = pygame.Vector2(init_pos[0], init_pos[1])
         self.rect = pygame.Rect(init_pos[0], init_pos[1], settings.tilesize, settings.tilesize)
         self.init_pos = self.rect.copy()
-        # self.vel = pygame.Vector2(0, 0)
 
-        self.movement = [0, 0]
-        # self.radius = int(settings.tilesize//2)
-        
+        self.movement = [0.0, 0.0]
 
         self.img = pygame.image.load("assets/basky_32x32.png")
         self.angle = 0
@@ -29,6 +26,8 @@ class Sprite:
         self.movement[0] = (keys[pygame.K_d] - keys[pygame.K_a])
         self.movement[1] = (keys[pygame.K_s] - keys[pygame.K_w])
 
+        self.normalize_movement()
+
 
     def update(self, delta: float, surface):
         # self.rect += self.vel * delta
@@ -38,15 +37,21 @@ class Sprite:
         # pygame.draw.rect(surface, colors["red"], pygame.Rect(
         #     position_tilemap[0] * settings.tilesize, position_tilemap[1] * settings.tilesize, settings.tilesize, settings.tilesize))
 
-        self.rect.x += self.movement[0] * settings.player_speed * delta
-        self.rect.y += self.movement[1] * settings.player_speed * delta
+        self.rect.left += int(self.movement[0] * settings.player_speed * delta)
+        self.rect.top += int(self.movement[1] * settings.player_speed * delta)
 
-        movements_prohibited = self.get_tilemap_collision(
+        movement_prohibited_x, movement_prohibited_y = self.get_tilemap_collision(
             surface, position_tilemap)
 
-        if tuple(self.movement) not in movements_prohibited:
-            self.rect.left += int(self.movement[0] * settings.player_speed * delta)
-            self.rect.top += int(self.movement[1] * settings.player_speed * delta)
+        # if self.movement[0] not in movement_prohibited_x:
+        #     self.rect.left += int(self.movement[0] * settings.player_speed * delta)
+        # else:
+        #     print(f"cant move x: {self.movement[0]}")
+        #
+        # if self.movement[1] not in movement_prohibited_y:
+        #     self.rect.top += int(self.movement[1] * settings.player_speed * delta)
+        # else:
+        #     print(f"cant move y: {self.movement[1]}")
         
 
 
@@ -65,15 +70,15 @@ class Sprite:
 
     # this functions checks for collision around the player
     # and returns the collision data that has the shortest normal
-    def get_tilemap_collision(self, surface, position_tilemap) -> list[tuple[int, int]]:
-        position_around = [(-1, 1), (-1, -1), (0, 0), (1, 1),
-                           (1, -1), (-1, 0), (1, 0), (0, 1), (0, -1)]
+    def get_tilemap_collision(self, surface, position_tilemap) -> tuple[list[int], list[int]]:
+        position_around = [(-1, 0), (1, 0), (0, 1), (0, -1)]
         
-        movements_prohibited = []
+        movement_prohibited_x = []
+        movement_prohibited_y = []
 
         for pos in position_around:
             tile = self.tilemap.get(f"{position_tilemap[0] + pos[0]};{position_tilemap[1] + pos[1]}")
-            if tile and self.rect.colliderect(tile["rect"]):
+            if tile and tile["collidable"] and self.rect.colliderect(tile["rect"]):
                 if pos[0] == 1:
                     self.rect.right = tile["rect"].left
                 if pos[0] == -1:
@@ -85,9 +90,10 @@ class Sprite:
                 if pos[1] == -1:
                     self.rect.top = tile["rect"].bottom
 
-                movements_prohibited.append(pos)
+                movement_prohibited_x.append(pos[0])
+                movement_prohibited_y.append(pos[1])
 
-        return movements_prohibited
+        return movement_prohibited_x, movement_prohibited_y
 
     # returns collision data between a pygame.Rect object and player
 
@@ -99,10 +105,12 @@ class Sprite:
 
         return value
 
-    def get_self_rect(self) -> pygame.Rect:
-        return pygame.Rect(self.rect[0], self.rect[1], settings.tilesize, settings.tilesize)
+    def normalize_movement(self):
+        length = sqrt(self.movement[0]**2 + self.movement[1]**2)
 
-
+        if length != 0:
+            self.movement[0] /= length
+            self.movement[1] /= length
 
 class State(Enum):
     NORMAL = 0

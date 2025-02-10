@@ -20,7 +20,7 @@ class LevelManager:
         with open(f"tilemaps/{level}.csv", "r") as file:
             tilemap = file.readlines()
             # print(tilemap)
-        
+
         clean_tilemap = []
         for i in tilemap:
             clean_tilemap.append(i.strip().split(","))
@@ -36,16 +36,23 @@ class LevelManager:
                 if clean_tilemap[y][x] == "1":
                     sep_tilemap[f"{x};{y}"] = {"type": "wall",
                                                "rect": pygame.Rect(
-                        x*settings.tilesize, y*settings.tilesize, settings.tilesize, settings.tilesize),
-                                               "pixel_coor":(x*settings.tilesize, y*settings.tilesize)}
+                                                   x*settings.tilesize, y*settings.tilesize, settings.tilesize, settings.tilesize),
+                                               "pixel_coor": (x*settings.tilesize, y*settings.tilesize),
+                                               "collidable": True
+                                               }
 
+                if clean_tilemap[y][x] == "-1":
+                    sep_tilemap[f"{x};{y}"] = {"type": "ground",
+                                               "rect": pygame.Rect(
+                                                   x*settings.tilesize, y*settings.tilesize, settings.tilesize, settings.tilesize),
+                                               "pixel_coor": (x*settings.tilesize, y*settings.tilesize),
+                                               "collidable": False
+                                               }
                 elif tile_type == "-2":
-                    init_pos_player = (x * settings.tilesize, y * settings.tilesize)
-
+                    init_pos_player = (x * settings.tilesize,
+                                       y * settings.tilesize)
 
         sep_tilemap["height"] = tilemap_height
         sep_tilemap["width"] = tilemap_width
-    
-
 
         return sep_tilemap, init_pos_player, hoop_info

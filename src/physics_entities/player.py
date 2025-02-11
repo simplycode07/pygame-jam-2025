@@ -19,6 +19,8 @@ class Sprite:
         self.img = pygame.image.load("assets/basky_32x32.png")
         self.angle = 0
 
+        self.color = colors["red"]
+
         self.state = State.NORMAL
 
     def handle_input(self, event):
@@ -59,7 +61,7 @@ class Sprite:
         new_state = None
         
         tile = self.tilemap.get(f"{position_tilemap[0]};{position_tilemap[1]}")
-        if tile and tile["type"] == "teleport_tile":
+        if tile and tile["type"] == "teleport_tile" and tile["active"]:
             change_state = True
             new_state = int(self.curr_level) + 1
 
@@ -83,7 +85,7 @@ class Sprite:
 
         for pos in position_around:
             tile = self.tilemap.get(f"{position_tilemap[0] + pos[0]};{position_tilemap[1] + pos[1]}")
-            if tile and tile["collidable"] and self.rect.colliderect(tile["rect"]):
+            if tile and tile["collidable"] and self.rect.colliderect(tile["rect"]) and self.color != tile.get("color"):
                 if pos[0] == 1:
                     self.rect.right = tile["rect"].left
                 if pos[0] == -1:

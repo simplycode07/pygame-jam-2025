@@ -1,6 +1,5 @@
 import pygame
 
-from enum import Enum
 from math import floor
 
 from . import settings, colors
@@ -26,7 +25,7 @@ class Renderer:
                         tile_rect.left -= self.offset_x
                         tile_rect.top -= self.offset_y
                         pygame.draw.rect(
-                            self.surface, colors["green"], tile_rect)
+                            self.surface, tile["color"], tile_rect)
                         pygame.draw.rect(
                             self.surface, colors["black"], tile_rect, width=1)
 
@@ -44,6 +43,7 @@ class Renderer:
                                    self.offset_x, player.rect.top - self.offset_y]
             self.move_camera(tilemap, adjusted_player_pos)
 
+            pygame.draw.circle(self.surface, player.color, [i + settings.tilesize//2 for i in adjusted_player_pos], settings.tilesize // 2 + 2)
             self.surface.blit(player.img, adjusted_player_pos)
 
         else:

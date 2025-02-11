@@ -30,6 +30,15 @@ class Renderer:
                         pygame.draw.rect(
                             self.surface, colors["black"], tile_rect, width=1)
 
+                    if tile and tile["type"] == "teleport_tile":
+                        tile_rect: pygame.Rect = tile["rect"].copy()
+                        tile_rect.left -= self.offset_x
+                        tile_rect.top -= self.offset_y
+                        pygame.draw.rect(
+                            self.surface, colors["yellow"], tile_rect)
+                        pygame.draw.rect(
+                            self.surface, colors["black"], tile_rect, width=1)
+
             # adjusted_player_pos = player.rect.topleft - (self.offset_x, self.offset_y)
             adjusted_player_pos = [player.rect.left -
                                    self.offset_x, player.rect.top - self.offset_y]

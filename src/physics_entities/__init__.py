@@ -5,13 +5,11 @@ from src.ui import UIState
 from .player import Sprite
 
 class PhysicsEntities:
-    def __init__(self, level_info) -> None:
+    def __init__(self, level_info, curr_level) -> None:
         self.tilemap = level_info[0]
         player_info = level_info[1]
-        hoop_info = level_info[2]
 
-        self.player = Sprite(self.tilemap, player_info)
-        # self.hoop = Hoop(hoop_info)
+        self.player = Sprite(self.tilemap, player_info, curr_level)
 
     def handle_input(self, event):
         self.player.handle_input(event)
@@ -43,8 +41,8 @@ class PhysicsEntities:
     # 1) x, y -> current position
     # 2) collision range -> basically the area in which you wanna check for collision
     def object_near_player(self, entity) -> bool:
-        if abs(self.player.pos[0] - entity.pos[0]) < entity.collision_range:
-            if abs(self.player.pos[1] - entity.pos[1]) < entity.collision_range:
+        if abs(self.player.rect.left - entity.pos[0]) < entity.collision_range:
+            if abs(self.player.rect.top - entity.pos[1]) < entity.collision_range:
                 return True
 
         return False

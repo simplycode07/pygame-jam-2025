@@ -14,7 +14,7 @@ class Game:
         
         self.level_manager = level.LevelManager("saves/test.save")
         self.level_info = self.level_manager.load_tilemap(0)
-        self.physics_module = PhysicsEntities(self.level_info)
+        self.physics_module = PhysicsEntities(self.level_info, 0)
 
         self.game_state = UIState.MENU
         self.ui_manager = UIManager()
@@ -54,7 +54,7 @@ class Game:
                         else:
                             self.game_state = UIState.GAME
                             self.level_info = self.level_manager.load_tilemap(level)
-                            self.physics_module = PhysicsEntities(self.level_info)
+                            self.physics_module = PhysicsEntities(self.level_info, level)
 
 
                 elif self.game_state == UIState.GAME_END:
@@ -66,7 +66,13 @@ class Game:
 
             if self.game_state == UIState.GAME:
                 change_state, new_state = self.physics_module.update(1/settings.physics_fps, self.display)
-                if change_state: self.game_state = UIState(new_state)
+                if change_state:
+                    if isinstance(new_state, UIState):
+                        self.game_state = UIState(new_state)
+
+                    else:
+                        self.level_info = self.level_manager.load_tilemap(new_state, self.physics_module.player.rect.topleft)
+                        self.physics_module = PhysicsEntities(self.level_info, new_state)
 
             self.renderer.render(self.display, self.physics_module.player, self.physics_module.tilemap, self.game_state)
             pygame.display.update()

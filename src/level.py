@@ -12,10 +12,7 @@ class LevelManager:
             data = file.read().split(",")
             self.level = data[0]
 
-    # def load_level(self, level):
-    #     self.player = Sprite(self.load_tilemap(level))
-
-    def load_tilemap(self, level):
+    def load_tilemap(self, level, init_pos_player=[0, 0]):
         print(f"loading level {level}")
         with open(f"tilemaps/{level}.csv", "r") as file:
             tilemap = file.readlines()
@@ -26,8 +23,7 @@ class LevelManager:
             clean_tilemap.append(i.strip().split(","))
 
         sep_tilemap = {}
-        init_pos_player = (0, 0)
-        hoop_info = [(0, 0), ""]
+        # init_pos_player = (0, 0)
         tilemap_height = len(clean_tilemap)
         tilemap_width = len(clean_tilemap[0])
         for y, x_pos in enumerate(clean_tilemap):
@@ -41,6 +37,13 @@ class LevelManager:
                                                "collidable": True
                                                }
 
+                if clean_tilemap[y][x] == "0":
+                    sep_tilemap[f"{x};{y}"] = {"type": "teleport_tile",
+                                               "rect": pygame.Rect(
+                                                   x*settings.tilesize, y*settings.tilesize, settings.tilesize, settings.tilesize),
+                                               "pixel_coor": (x*settings.tilesize, y*settings.tilesize),
+                                               "collidable": False
+                                               }
                 if clean_tilemap[y][x] == "-1":
                     sep_tilemap[f"{x};{y}"] = {"type": "ground",
                                                "rect": pygame.Rect(
@@ -49,10 +52,10 @@ class LevelManager:
                                                "collidable": False
                                                }
                 elif tile_type == "-2":
-                    init_pos_player = (x * settings.tilesize,
-                                       y * settings.tilesize)
+                    init_pos_player = [x * settings.tilesize,
+                                       y * settings.tilesize]
 
         sep_tilemap["height"] = tilemap_height
         sep_tilemap["width"] = tilemap_width
 
-        return sep_tilemap, init_pos_player, hoop_info
+        return sep_tilemap, tuple(init_pos_player)

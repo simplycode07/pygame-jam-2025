@@ -13,7 +13,7 @@ tilesize = 32
 num_tiles_x = int(screen_width//tilesize)
 num_tiles_y = int(screen_height//tilesize)
 
-player_speed = 300
+player_speed = 500
 # physics
 gravity = 1000
 elasticity_y = 0.6

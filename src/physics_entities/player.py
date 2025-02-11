@@ -7,8 +7,9 @@ from enum import Enum
 
 
 class Sprite:
-    def __init__(self, tilemap, init_pos) -> None:
+    def __init__(self, tilemap, init_pos, curr_level) -> None:
         self.tilemap = tilemap
+        self.curr_level = curr_level
 
         self.rect = pygame.Rect(init_pos[0], init_pos[1], settings.tilesize, settings.tilesize)
         self.init_pos = self.rect.copy()
@@ -54,10 +55,14 @@ class Sprite:
         #     print(f"cant move y: {self.movement[1]}")
         
 
-
         change_state = False
         new_state = None
         
+        tile = self.tilemap.get(f"{position_tilemap[0]};{position_tilemap[1]}")
+        if tile and tile["type"] == "teleport_tile":
+            change_state = True
+            new_state = int(self.curr_level) + 1
+
         return (change_state, new_state)
 
 

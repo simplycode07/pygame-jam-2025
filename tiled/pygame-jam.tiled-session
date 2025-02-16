@@ -3,17 +3,38 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level-no.tmx",
+    "activeFile": "/home/dhruv/projects/basky/tiled/basky-tileset.tsx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "/home/dhruv/projects/basky/tiled/basky-tileset.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/home/dhruv/projects/basky/tiled/level-no.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1792,
+                "y": 1024.5
+            }
+        },
+        "/home/dhruv/projects/basky/tiled/level1.tmx": {
+            "scale": 1.0414374999999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 799.8559683130289,
+                "y": 399.92798415651447
+            }
+        },
         "level-no-2.tmx": {
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 719.9999999999999,
-                "y": 474.66666666666663
+                "x": 799.9999999999999,
+                "y": 530
             }
         },
         "level-no.tmx": {
@@ -21,7 +42,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 1028,
-                "y": 454
+                "y": 453
             }
         },
         "tileset.tsx": {
@@ -37,12 +58,18 @@
     "openFiles": [
         "level-no.tmx",
         "level-no-2.tmx",
-        "tileset.tsx"
+        "tileset.tsx",
+        "/home/dhruv/projects/basky/tiled/level1.tmx",
+        "/home/dhruv/projects/basky/tiled/level-no.tmx",
+        "/home/dhruv/projects/basky/tiled/basky-tileset.tsx"
     ],
     "project": "pygame-jam.tiled-project",
     "recentFiles": [
-        "tileset.tsx",
+        "level-no.tmx",
         "level-no-2.tmx",
-        "level-no.tmx"
+        "tileset.tsx",
+        "/home/dhruv/projects/basky/tiled/level1.tmx",
+        "/home/dhruv/projects/basky/tiled/level-no.tmx",
+        "/home/dhruv/projects/basky/tiled/basky-tileset.tsx"
     ]
 }
